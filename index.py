@@ -1,15 +1,22 @@
 from glob import glob
-from comicstrip import Page
 from shutil import rmtree, copytree
 
-from patches.seperate_chapter_title import patch_seperate_chapter_title
-from patches.split_to_panels import patch_split_to_panels
+from patches.replace_chapter_1_page_1 import replace_chapter_1_page_1
+from patches.jpegs_to_jpg import jpegs_to_jpg
+from patches.seperate_chapter_title import seperate_chapter_title
+from patches.split_to_panels import split_into_panels
 
-pages = glob("**/page-1.jpg", recursive=True, root_dir="patched/")
+def patch(patch, selector="*"):
+    pages = glob(f"**/{selector}.jpg", recursive=True, root_dir="patched/")
+    patch(pages)
 
 
 rmtree("patched/", ignore_errors=True)
 copytree("extracted/", "patched/")
 
-patch_seperate_chapter_title(pages)
-patch_split_to_panels(pages)
+# Run patches that can run without params
+jpegs_to_jpg()
+replace_chapter_1_page_1()
+
+patch(seperate_chapter_title, "page-1")
+patch(split_into_panels)

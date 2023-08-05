@@ -1,7 +1,6 @@
-from comicstrip import Page
-from os import remove
+from comicstrip import Page  # Install from https://github.com/denperidge/comicstrip
 
-def patch_split_to_panels(pages):
+def split_into_panels(pages):
     for page in pages:   
         output_name = "patched/" + page.replace(".jpg", "")
 
