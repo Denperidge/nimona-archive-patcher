@@ -11,15 +11,21 @@ def patch(patch, selector="*"):
     pages = glob(f"**/{selector}.jpg", recursive=True, root_dir="patched/")
     patch(pages)
 
+print("Select mode:")
+print("0: Check transcription progress")
+print("1: Created patched/")
 
-rmtree("patched/", ignore_errors=True)
-copytree("extracted/", "patched/")
+mode = int(input("Mode: "))
 
-# Run patches that can run without params
-jpegs_to_jpg()
-replace_chapter_1_page_1()
+if mode == 1:
+    rmtree("patched/", ignore_errors=True)
+    copytree("extracted/", "patched/")
 
-patch(seperate_chapter_title, "page-1")
-patch(split_into_panels, "page-*")
+    # Run patches that can run without params
+    jpegs_to_jpg()
+    replace_chapter_1_page_1()
+
+    patch(seperate_chapter_title, "page-1")
+    patch(split_into_panels, "page-*")
 
 patch(generate_transcript_structure, "page-*-panel-*")

@@ -1,5 +1,6 @@
 from os import makedirs
 from os.path import exists, dirname
+from json import load, dump
 
 
 def generate_transcript_structure(pages):
@@ -8,13 +9,26 @@ def generate_transcript_structure(pages):
 
         makedirs(dirname(base_path), exist_ok=True)
 
-        alt_path = base_path + ".alt.txt"
-        id_path = base_path + ".id.txt"
+        path = base_path + ".json"
 
-        for path in [alt_path, id_path]:
-            if not exists(path):
-                with open(path, "w"):
-                    pass
+        if not exists(path):
+            with open(path, "w", encoding="UTF-8") as file:
+                dump(
+                    {
+                        "alt": "",
+                        "image-description": ""
+                    }, file)
+        else:
+            with open(path, "r", encoding="UTF-8") as file:
+                data = load(file)
+                if data["alt"] == "":
+                    print(f"[{path}] Missing alt text")
+                if data[("image-description")]:
+                    print(f"[{path}] Missing image description")
+
+            
+
+            
         
 
 
