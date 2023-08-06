@@ -20,4 +20,4 @@ python3.10 index.py
 
 ### (Optional) Upload to a file server
 tar -czvf patched.tar.gz ./patched/
-scp extracted.tar.gz DOMAIN_OR_IP:/srv/nimona-archive/
+scp patched.tar.gz DOMAIN_OR_IP:/srv/nimona-archive/
