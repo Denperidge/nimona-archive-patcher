@@ -12,7 +12,7 @@ def str_presenter(dumper, data):
 
 representer.SafeRepresenter.add_representer(str, str_presenter)
 
-default_alt_text = "Alt text\nhere"
+default_transcript_text = "Write text\nhere"
 
 def handle_transcripts(pages):
     print(pages)
@@ -24,13 +24,13 @@ def handle_transcripts(pages):
 
         if not exists(path):
             data = dict({
-                "image-description": "",
+                "image-description": default_transcript_text,
                 "alt-texts": {}
             })
 
             for panel in panels:
                 panel = panel
-                data["alt-texts"][panel] = default_alt_text
+                data["alt-texts"][panel] = default_transcript_text
                 
             with open(path, "w", encoding="UTF-8") as file:
                 safe_dump(data, file, sort_keys=False)
@@ -47,5 +47,5 @@ def handle_transcripts(pages):
                     panel = panel
                     if panel not in data["alt-texts"]:
                         print(f"[{path}] ERROR: no alt-text key for {panel}")
-                    elif data["alt-texts"][panel] == default_alt_text:
+                    elif data["alt-texts"][panel] == default_transcript_text:
                         print(f"[{path}] Missing alt-text entry for {panel}")
