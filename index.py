@@ -12,14 +12,14 @@ def patch(patch, selector="*"):
     patch(pages)
 
 
-#rmtree("patched/", ignore_errors=True)
-#copytree("extracted/", "patched/")
+rmtree("patched/", ignore_errors=True)
+copytree("extracted/", "patched/")
 
 # Run patches that can run without params
-#jpegs_to_jpg()
-#replace_chapter_1_page_1()
+jpegs_to_jpg()
+replace_chapter_1_page_1()
 
- #patch(seperate_chapter_title, "page-1")
-#patch(split_into_panels)
+patch(seperate_chapter_title, "page-1")
+patch(split_into_panels, "page-*")
 
-patch(generate_transcript_structure, "page-*-*")
+patch(generate_transcript_structure, "page-*-panel-*")
