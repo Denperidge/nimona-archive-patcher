@@ -1,7 +1,9 @@
+from os import makedirs
 from comicstrip import Page  # Install from https://github.com/denperidge/comicstrip
 
 def split_into_panels(pages):
     for page in pages:
-        output_name = "patched/" + page.replace(".jpg", "")
+        page_dir = "patched/" + page.replace(".jpg", "") + "/"
+        makedirs(page_dir, exist_ok=True)
 
-        Page("patched/" + page).save(output_name + "-panel-", counter=1)
+        Page("patched/" + page).save(page_dir + "panel-", counter=1)

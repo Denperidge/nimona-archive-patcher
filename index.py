@@ -5,7 +5,7 @@ from patches.replace_chapter_1_page_1 import replace_chapter_1_page_1
 from patches.jpegs_to_jpg import jpegs_to_jpg
 from patches.seperate_chapter_title import seperate_chapter_title
 from patches.split_to_panels import split_into_panels
-from patches.generate_transcript_structure import generate_transcript_structure
+from patches.generate_transcript_structure import handle_alt_files, handle_image_description_files
 
 def patch(patch, selector="*"):
     pages = glob(f"**/{selector}.jpg", recursive=True, root_dir="patched/")
@@ -28,4 +28,5 @@ if mode == 1:
     patch(seperate_chapter_title, "page-1")
     patch(split_into_panels, "page-*")
 
-patch(generate_transcript_structure, "page-*-panel-*")
+patch(handle_alt_files, "panel-*")
+patch(handle_image_description_files, "page-*.jpg")
