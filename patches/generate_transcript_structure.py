@@ -1,31 +1,23 @@
 from os import makedirs
 from glob import glob
 from os.path import exists, dirname
-from json import load, dump
+from yaml import safe_dump, safe_load, representer
 
+def str_presenter(dumper, data):
+    """configures yaml for dumping multiline strings
+    Ref: https://stackoverflow.com/questions/8640959/how-can-i-control-what-scalar-form-pyyaml-uses-for-my-data"""
+    if data.count('\n') > 0:  # check for multiline string
+        return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
+    return dumper.represent_scalar('tag:yaml.org,2002:str', data)
 
-def handle_alt_files(panels):
-    for panel in panels:
-        base_path = "assets/" + panel.replace(".jpg", "")
+representer.SafeRepresenter.add_representer(str, str_presenter)
 
-        makedirs(dirname(base_path), exist_ok=True)
-
-        path = base_path + ".alt.txt"
-
-        if not exists(path):
-            with open(path, "w", encoding="UTF-8"):
-                pass
-        else:
-            with open(path, "r", encoding="UTF-8") as file:
-                data = file.read()
-                if data == "":
-                    print(f"[{path}] Missing alt text")
-
+default_alt_text = "Alt text\nhere"
 
 def handle_transcripts(pages):
     print(pages)
     for page in pages:
-        path = "assets/" + page.replace(".jpg", ".json")
+        path = "assets/" + page.replace(".jpg", ".yml")
 
         panels = glob("*", root_dir="patched/" + page.replace(".jpg", "/"))
         panels = [panel.replace(".jpg", "") for panel in panels]
@@ -38,16 +30,16 @@ def handle_transcripts(pages):
 
             for panel in panels:
                 panel = panel
-                data["alt-texts"][panel] = ""
+                data["alt-texts"][panel] = default_alt_text
                 
             with open(path, "w", encoding="UTF-8") as file:
-                dump(data, file)
+                safe_dump(data, file, sort_keys=False)
                 
                 
                 
         else:
             with open(path, "r", encoding="UTF-8") as file:
-                data = load(file)
+                data = safe_load(file)
                 if data["image-description"] == "":
                     print(f"[{path}] Missing image description text")
                 
@@ -55,6 +47,5 @@ def handle_transcripts(pages):
                     panel = panel
                     if panel not in data["alt-texts"]:
                         print(f"[{path}] ERROR: no alt-text key for {panel}")
-                    elif data["alt-texts"][panel] == "":
+                    elif data["alt-texts"][panel] == default_alt_text:
                         print(f"[{path}] Missing alt-text entry for {panel}")
-            
